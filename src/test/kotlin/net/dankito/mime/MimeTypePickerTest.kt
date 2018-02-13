@@ -6,11 +6,11 @@ import org.hamcrest.number.OrderingComparison
 import org.junit.Assert.assertThat
 import org.junit.Test
 
-class MimeTypeCategorizerTest {
+class MimeTypePickerTest {
 
     private val detector = MimeTypeDetector()
 
-    private val underTest = MimeTypeCategorizer()
+    private val underTest = MimeTypePicker()
 
 
     @Test
