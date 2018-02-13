@@ -9,7 +9,7 @@ import java.net.URI
  * Has methods to retrieve a Mime type from a file extension or
  * a file extension from a Mime type.
  *
- * Created on 13.02.2018 19:05:08 GMT+0000 from the .csv files from
+ * Created on 13.02.2018 19:32:22 GMT+0000 from the .csv files from
  * http://www.iana.org/assignments/media-types/media-types.xhtml
  */
 open class MimeTypeDetector {
@@ -2404,14 +2404,6 @@ open class MimeTypeDetector {
 
 
     open protected fun add(mimeType: String, fileExtension: String) {
-        val mimeTypeLowerCased = mimeType.toLowerCase()
-
-        if(mimeTypesMap.containsKey(mimeTypeLowerCased) == false) {
-            mimeTypesMap.put(mimeTypeLowerCased, LinkedHashSet())
-        }
-
-        mimeTypesMap[mimeTypeLowerCased]?.add(fileExtension)
-
         val fileExtensionLowerCased = fileExtension.toLowerCase()
 
         if(fileExtensionsToMimeTypeMap.containsKey(fileExtensionLowerCased) == false) {
@@ -2420,6 +2412,14 @@ open class MimeTypeDetector {
 
         fileExtensionsToMimeTypeMap[fileExtensionLowerCased]?.add(mimeType)
 
+
+        val mimeTypeLowerCased = mimeType.toLowerCase()
+
+        if(mimeTypesMap.containsKey(mimeTypeLowerCased) == false) {
+            mimeTypesMap.put(mimeTypeLowerCased, LinkedHashSet())
+        }
+
+        mimeTypesMap[mimeTypeLowerCased]?.add(fileExtension)
     }
 
 }
