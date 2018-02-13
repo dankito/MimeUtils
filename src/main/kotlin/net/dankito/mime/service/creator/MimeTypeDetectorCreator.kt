@@ -65,7 +65,6 @@ open class MimeTypeDetectorCreator(protected val retriever: IanaMimeTypeRetrieve
         var newIndent = indent
         val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss zZ")
         dateFormat.timeZone = TimeZone.getTimeZone("GMT")
-        val now = Calendar.getInstance(TimeZone.getTimeZone("GMT")).time
 
         writeLine(writer, "/**", indent)
         writeLine(writer, " * Class containing all IANA Mime types", indent)
@@ -109,10 +108,10 @@ open class MimeTypeDetectorCreator(protected val retriever: IanaMimeTypeRetrieve
     open protected fun writeGetMimeTypeForExtension(writer: FileWriter, indent: Int, fileExtensionsMap: String): Int {
         var newIndent = indent
 
-        writeLine(writer, "open fun getMimeTypeForExtension(fileExtensions: String): String? {", newIndent)
+        writeLine(writer, "open fun getMimeTypeForExtension(fileExtension: String): String? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return $fileExtensionsMap[fileExtensions]", newIndent)
+        writeLine(writer, "return $fileExtensionsMap[fileExtension.toLowerCase()]", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
@@ -125,7 +124,7 @@ open class MimeTypeDetectorCreator(protected val retriever: IanaMimeTypeRetrieve
         writeLine(writer, "open fun getExtensionsForMimeType(mimeType: String): List<String>? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return $mimeTypesMap[mimeType]?.toList()", newIndent)
+        writeLine(writer, "return $mimeTypesMap[mimeType.toLowerCase()]?.toList()", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
@@ -138,16 +137,18 @@ open class MimeTypeDetectorCreator(protected val retriever: IanaMimeTypeRetrieve
         writeLine(writer, "open protected fun add(mimeType: String, fileExtension: String) {", newIndent)
         newIndent++
 
-        writeLine(writer, "if($mimeTypesMap.containsKey(mimeType) == false) {", newIndent)
+        writeLineAndAnEmptyLine(writer, "val mimeTypeLowerCased = mimeType.toLowerCase()", newIndent)
+
+        writeLine(writer, "if($mimeTypesMap.containsKey(mimeTypeLowerCased) == false) {", newIndent)
         newIndent++
 
-        writeLine(writer, "$mimeTypesMap.put(mimeType, LinkedHashSet())", newIndent)
+        writeLine(writer, "$mimeTypesMap.put(mimeTypeLowerCased, LinkedHashSet())", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
-        writeLineAndAnEmptyLine(writer, "$mimeTypesMap[mimeType]?.add(fileExtension)", newIndent)
+        writeLineAndAnEmptyLine(writer, "$mimeTypesMap[mimeTypeLowerCased]?.add(fileExtension)", newIndent)
 
-        writeLine(writer, "$fileExtensionsMap.put(fileExtension, mimeType)", newIndent)
+        writeLine(writer, "$fileExtensionsMap.put(fileExtension.toLowerCase(), mimeType)", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
