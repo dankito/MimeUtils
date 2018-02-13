@@ -1,0 +1,33 @@
+buildscript {
+    ext.kotlin_version = '1.2.10'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'net.dankito.mime'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.7"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.7"
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
