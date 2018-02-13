@@ -272,7 +272,7 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
 
         newIndent = writeStatementEnd(writer, newIndent)
 
-        writeLineAndAnEmptyLine(writer, "$fileExtensionsMap[fileExtensionLowerCased]?.add(mimeType)", newIndent)
+        writeLine(writer, "$fileExtensionsMap[fileExtensionLowerCased]?.add(mimeType)", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
