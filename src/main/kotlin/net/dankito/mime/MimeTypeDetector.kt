@@ -1,12 +1,15 @@
 package net.dankito.mime
 
+import java.io.File
+import java.net.URI
+
 /**
  * Class containing all IANA Mime types
- * 
+ *
  * Has methods to retrieve a Mime type from a file extension or
  * a file extension from a Mime type.
- * 
- * Created on 13.02.2018 17:05:30 GMT+0000 from the .csv files from
+ *
+ * Created on 13.02.2018 17:33:36 GMT+0000 from the .csv files from
  * http://www.iana.org/assignments/media-types/media-types.xhtml
  */
 open class MimeTypeDetector {
@@ -1712,9 +1715,42 @@ open class MimeTypeDetector {
 	}
 
 
-	open fun getMimeTypeForExtension(fileExtension: String): String? {
-		return fileExtensionsToMimeTypeMap[fileExtension.toLowerCase()]
+	open fun getMimeTypeForUri(uri: URI): String? {
+		return getMimeTypeForFilename(uri.toASCIIString())
 	}
+
+	open fun getMimeTypeForFile(file: File): String? {
+		return getMimeTypeForExtension(file.extension)
+	}
+
+	open fun getMimeTypeForFilename(filename: String): String? {
+		return getMimeTypeForExtension(filename.substringAfterLast('.', ""))
+	}
+
+	open fun getMimeTypeForExtension(fileExtension: String): String? {
+		return fileExtensionsToMimeTypeMap[normalizeFileExtension(fileExtension)]
+	}
+
+	/**
+	 * Removes '*.' at start of extension filter and lower cases extension
+	 */
+	open protected fun normalizeFileExtension(extension: String?): String? {
+		if(extension == null) {
+			return extension
+		}
+
+		var normalizedExtension = extension
+		if(normalizedExtension.startsWith('*')) {
+			normalizedExtension = normalizedExtension.substring(1)
+		}
+
+		if(normalizedExtension.startsWith('.')) {
+			normalizedExtension = normalizedExtension.substring(1)
+		}
+
+		return normalizedExtension.toLowerCase()
+	}
+
 
 	open fun getExtensionsForMimeType(mimeType: String): List<String>? {
 		return mimeTypesMap[mimeType.toLowerCase()]?.toList()
