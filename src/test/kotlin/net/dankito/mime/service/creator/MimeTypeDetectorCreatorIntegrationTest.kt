@@ -26,7 +26,7 @@ class MimeTypeDetectorCreatorIntegrationTest {
 
         reader.close()
 
-        assertThat(createdFile.lines().size, `is`(1773))
+        assertThat(createdFile.lines().size, `is`(2426))
     }
 
 }
