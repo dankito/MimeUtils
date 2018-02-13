@@ -1,6 +1,5 @@
-package net.dankito.mime
+package net.dankito.mime.service.creator
 
-import net.dankito.mime.service.creator.IanaMimeTypeFileParser
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
