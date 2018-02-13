@@ -20,7 +20,7 @@ open class FileDownloader {
 
 
     // avoid creating several instances, should be singleton
-    private val client: OkHttpClient
+    protected val client: OkHttpClient
 
 
     init {
