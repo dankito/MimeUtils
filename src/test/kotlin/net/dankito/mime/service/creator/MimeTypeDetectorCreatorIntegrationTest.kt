@@ -9,7 +9,9 @@ import java.io.FileReader
 
 class MimeTypeDetectorCreatorIntegrationTest {
 
-    private val underTest = MimeTypeDetectorCreator(IanaMimeTypeRetriever(IanaMimeTypeFileParser(), FileDownloader()))
+    private val downloader = FileDownloader()
+
+    private val underTest = MimeTypeDetectorCreator(IanaMimeTypeRetriever(IanaMimeTypeFileParser(), downloader), SitePointMimeTypeWebsiteParser(downloader))
 
 
     @Test
