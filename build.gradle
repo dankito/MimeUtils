@@ -6,6 +6,8 @@ buildscript {
 
         okHttpVersion = '3.9.1'
 
+        jsoupVersion = '1.11.2'
+
 
         junitVersion = '4.12'
 
@@ -64,6 +66,8 @@ dependencies {
     compile "org.slf4j:slf4j-api:$slf4jVersion"
 
     compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+
+    compile "org.jsoup:jsoup:$jsoupVersion"
 
 
     testCompile ("junit:junit:$junitVersion", {
