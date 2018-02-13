@@ -1,6 +1,8 @@
 buildscript {
     ext {
         kotlinVersion = '1.2.10'
+
+        slf4jVersion = '1.7.25'
     }
 
     repositories {
@@ -32,4 +34,6 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
 }
