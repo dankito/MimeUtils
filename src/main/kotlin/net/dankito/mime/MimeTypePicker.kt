@@ -3,6 +3,11 @@ package net.dankito.mime
 
 class MimeTypePicker {
 
+    fun getBestPick(detector: MimeTypeDetector, fileExtension: String): String? {
+        return getBestPick(detector.getMimeTypesForExtension(fileExtension))
+    }
+
+
     fun getBestPick(mimeTypes: List<String>?): String? {
         mimeTypes?.let {
             if(mimeTypes.isEmpty()) {
