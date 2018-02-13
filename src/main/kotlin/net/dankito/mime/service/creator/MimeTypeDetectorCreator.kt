@@ -43,6 +43,11 @@ open class MimeTypeDetectorCreator(protected val retriever: IanaMimeTypeRetrieve
 
         indent = writeGetMimeTypeForExtension(writer, indent, fileExtensionsMap)
 
+        indent = writeNormalizeFileExtensionMethod(writer, indent)
+
+        writeEmptyLine(writer)
+
+
         indent = writeGetExtensionsForMimeTypeMethod(writer, indent, mimeTypesMap)
 
         writeEmptyLine(writer)
@@ -105,18 +110,64 @@ open class MimeTypeDetectorCreator(protected val retriever: IanaMimeTypeRetrieve
         return newIndent
     }
 
+
     open protected fun writeGetMimeTypeForExtension(writer: FileWriter, indent: Int, fileExtensionsMap: String): Int {
         var newIndent = indent
 
         writeLine(writer, "open fun getMimeTypeForExtension(fileExtension: String): String? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return $fileExtensionsMap[fileExtension.toLowerCase()]", newIndent)
+        writeLine(writer, "return $fileExtensionsMap[normalizeFileExtension(fileExtension)]", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
         return newIndent
     }
+
+    open protected fun writeNormalizeFileExtensionMethod(writer: FileWriter, indent: Int): Int {
+        var newIndent = indent
+
+        writeLine(writer, "/**", newIndent)
+        writeLine(writer, " * Removes '*.' at start of extension filter and lower cases extension", newIndent)
+        writeLine(writer, " */", newIndent)
+
+        writeLine(writer, "open protected fun normalizeFileExtension(extension: String?): String? {", newIndent)
+        newIndent++
+
+        writeLine(writer, "if(extension == null) {", newIndent)
+        newIndent++
+
+        writeLine(writer, "return extension", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+
+        writeLine(writer, "var normalizedExtension = extension", newIndent)
+
+        writeLine(writer, "if(normalizedExtension.startsWith('*')) {", newIndent)
+        newIndent++
+
+        writeLine(writer, "normalizedExtension = normalizedExtension.substring(1)", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+
+        writeLine(writer, "if(normalizedExtension.startsWith('.')) {", newIndent)
+        newIndent++
+
+        writeLine(writer, "normalizedExtension = normalizedExtension.substring(1)", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+
+        writeLine(writer, "return normalizedExtension.toLowerCase()", newIndent)
+
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+        return newIndent
+    }
+
 
     open protected fun writeGetExtensionsForMimeTypeMethod(writer: FileWriter, indent: Int, mimeTypesMap: String): Int {
         var newIndent = indent
