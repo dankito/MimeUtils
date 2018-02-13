@@ -39,8 +39,10 @@ open class IanaMimeTypeFileParser {
     open fun parseIanaCsvFile(csvFileLines: List<String>): Map<String, MutableSet<String>> {
         val mimeTypesToExtensionsMap = HashMap<String, MutableSet<String>>()
 
-        csvFileLines.forEach {
-            parseCsvLine(mimeTypesToExtensionsMap, it)
+        csvFileLines.forEach { line ->
+            if(line.isNotBlank()) {
+                parseCsvLine(mimeTypesToExtensionsMap, line)
+            }
         }
 
         return mimeTypesToExtensionsMap
