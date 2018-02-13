@@ -40,7 +40,7 @@ open class IanaMimeTypeFileParser {
         val mimeTypesToExtensionsMap = HashMap<String, MutableSet<String>>()
 
         csvFileLines.forEach { line ->
-            if(line.isNotBlank()) {
+            if(line.isNotBlank() && isHeaderLine(line) == false) {
                 parseCsvLine(mimeTypesToExtensionsMap, line)
             }
         }
@@ -55,9 +55,7 @@ open class IanaMimeTypeFileParser {
             val fileExtension = columns[0]
             val mimeType = columns[1] // TODO: what to do with empty Mime types?
 
-            if(fileExtension.toLowerCase() != "name") { // header starts with 'Name'
-                addFileExtensionForMimeType(mimeTypesToExtensionsMap, mimeType, fileExtension)
-            }
+            addFileExtensionForMimeType(mimeTypesToExtensionsMap, mimeType, fileExtension)
         }
         else {
             log.warn("Csv line has ${columns.size} but should have 3 or for image.csv 4 columns: $line")
@@ -72,6 +70,10 @@ open class IanaMimeTypeFileParser {
         if (fileExtensionsForMimeType.size == 1) {
             mimeTypesToExtensionsMap.put(mimeType, fileExtensionsForMimeType)
         }
+    }
+
+    private fun isHeaderLine(line: String): Boolean {
+        return line.toLowerCase().startsWith("name,")
     }
 
     private fun isValidLine(columns: List<String>): Boolean {
