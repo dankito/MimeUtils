@@ -1,6 +1,6 @@
 package net.dankito.mime
 
-import net.dankito.mime.util.FileDownloader
+import net.dankito.mime.service.FileDownloader
 import java.io.File
 
 

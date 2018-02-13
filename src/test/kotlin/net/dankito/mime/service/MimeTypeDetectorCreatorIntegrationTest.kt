@@ -2,7 +2,6 @@ package net.dankito.mime.service
 
 import net.dankito.mime.IanaMimeTypeFileParser
 import net.dankito.mime.IanaMimeTypeRetriever
-import net.dankito.mime.util.FileDownloader
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test

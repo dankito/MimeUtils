@@ -1,4 +1,4 @@
-package net.dankito.mime.util
+package net.dankito.mime.service
 
 import net.dankito.mime.model.DownloadResult
 import okhttp3.OkHttpClient
