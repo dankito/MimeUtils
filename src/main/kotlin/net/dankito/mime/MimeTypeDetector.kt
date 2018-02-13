@@ -6,7 +6,7 @@ package net.dankito.mime
  * Has methods to retrieve a Mime type from a file extension or
  * a file extension from a Mime type.
  * 
- * Created on 13.02.2018 16:03:45 GMT+0000 from the .csv files from
+ * Created on 13.02.2018 17:05:30 GMT+0000 from the .csv files from
  * http://www.iana.org/assignments/media-types/media-types.xhtml
  */
 open class MimeTypeDetector {
@@ -1712,23 +1712,25 @@ open class MimeTypeDetector {
 	}
 
 
-	open fun getMimeTypeForExtension(fileExtensions: String): String? {
-		return fileExtensionsToMimeTypeMap[fileExtensions]
+	open fun getMimeTypeForExtension(fileExtension: String): String? {
+		return fileExtensionsToMimeTypeMap[fileExtension.toLowerCase()]
 	}
 
 	open fun getExtensionsForMimeType(mimeType: String): List<String>? {
-		return mimeTypesMap[mimeType]?.toList()
+		return mimeTypesMap[mimeType.toLowerCase()]?.toList()
 	}
 
 
 	open protected fun add(mimeType: String, fileExtension: String) {
-		if(mimeTypesMap.containsKey(mimeType) == false) {
-			mimeTypesMap.put(mimeType, LinkedHashSet())
+		val mimeTypeLowerCased = mimeType.toLowerCase()
+
+		if(mimeTypesMap.containsKey(mimeTypeLowerCased) == false) {
+			mimeTypesMap.put(mimeTypeLowerCased, LinkedHashSet())
 		}
 
-		mimeTypesMap[mimeType]?.add(fileExtension)
+		mimeTypesMap[mimeTypeLowerCased]?.add(fileExtension)
 
-		fileExtensionsToMimeTypeMap.put(fileExtension, mimeType)
+		fileExtensionsToMimeTypeMap.put(fileExtension.toLowerCase(), mimeType)
 	}
 
 }
