@@ -50,6 +50,8 @@ class MimeTypePicker {
                 return tryToGuessBestMimeType(withoutApplicationAndExtensionsMimeTypes, mimeTypesWithoutEmptyEntries)
             }
 
+            containsSingleVndType(mimeTypesWithoutEmptyEntries)?.let { return it }
+
             return mimeTypes.last() // often the last Mime type is the best one
         }
 
@@ -91,6 +93,16 @@ class MimeTypePicker {
         val sortedCategories = categories.toList().sortedByDescending { (_, count) -> count }.toMap(LinkedHashMap())
         if(sortedCategories[sortedCategories.keys.first()] ?: 0 > sortedCategories[sortedCategories.keys.toList()[1]] ?: 0) {
             return sortedCategories.keys.first()
+        }
+
+        return null
+    }
+
+    private fun containsSingleVndType(mimeTypesWithoutEmptyEntries: List<String>): String? {
+        val vnds = mimeTypesWithoutEmptyEntries.filter { it.contains("vnd.", true) }
+
+        if(vnds.size == 1) {
+            return vnds[0]
         }
 
         return null

@@ -69,6 +69,11 @@ class MimeTypePickerTest {
     }
 
     @Test
+    fun getBestPickForPpt() {
+        getAndTestBestPick("ppt", "application/vnd.ms-powerpoint")
+    }
+
+    @Test
     fun getBestPickForGzip() {
         getAndTestBestPick("gzip", "application/gzip")
     }
