@@ -45,13 +45,13 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
         writeEmptyLine(writer)
 
 
-        indent = writeGetMimeTypeForUriMethod(writer, indent)
+        indent = writeGetMimeTypesForUriMethod(writer, indent)
 
-        indent = writeGetMimeTypeForFileMethod(writer, indent)
+        indent = writeGetMimeTypesForFileMethod(writer, indent)
 
-        indent = writeGetMimeTypeForFilenameMethod(writer, indent)
+        indent = writeGetMimeTypesForFilenameMethod(writer, indent)
 
-        indent = writeGetMimeTypeForExtensionMethod(writer, indent, fileExtensionsMap)
+        indent = writeGetMimeTypesForExtensionMethod(writer, indent, fileExtensionsMap)
 
         indent = writeNormalizeFileExtensionMethod(writer, indent)
 
@@ -106,7 +106,7 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
     open protected fun writeFields(writer: FileWriter, indent: Int, mimeTypesMap: String, fileExtensionsMap: String) {
         writeLineAndAnEmptyLine(writer, "protected val $mimeTypesMap = HashMap<String, MutableSet<String>>()", indent)
 
-        writeLineAndAnEmptyLine(writer, "protected val $fileExtensionsMap = HashMap<String, String>()", indent)
+        writeLineAndAnEmptyLine(writer, "protected val $fileExtensionsMap = HashMap<String, MutableSet<String>>()", indent)
     }
 
     open protected fun writeInitializerMethod(writer: FileWriter, indent: Int, ianaMimeTypesToExtensionsMap: Map<String, Set<String>>, sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
@@ -135,52 +135,52 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
     }
 
 
-    open protected fun writeGetMimeTypeForUriMethod(writer: FileWriter, indent: Int): Int {
+    open protected fun writeGetMimeTypesForUriMethod(writer: FileWriter, indent: Int): Int {
         var newIndent = indent
 
-        writeLine(writer, "open fun getMimeTypeForUri(uri: URI): String? {", newIndent)
+        writeLine(writer, "open fun getMimeTypesForUri(uri: URI): List<String>? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return getMimeTypeForFilename(uri.toASCIIString())", newIndent)
+        writeLine(writer, "return getMimeTypesForFilename(uri.toASCIIString())", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
         return newIndent
     }
 
-    open protected fun writeGetMimeTypeForFileMethod(writer: FileWriter, indent: Int): Int {
+    open protected fun writeGetMimeTypesForFileMethod(writer: FileWriter, indent: Int): Int {
         var newIndent = indent
 
-        writeLine(writer, "open fun getMimeTypeForFile(file: File): String? {", newIndent)
+        writeLine(writer, "open fun getMimeTypesForFile(file: File): List<String>? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return getMimeTypeForExtension(file.extension)", newIndent)
+        writeLine(writer, "return getMimeTypesForExtension(file.extension)", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
         return newIndent
     }
 
-    open protected fun writeGetMimeTypeForFilenameMethod(writer: FileWriter, indent: Int): Int {
+    open protected fun writeGetMimeTypesForFilenameMethod(writer: FileWriter, indent: Int): Int {
         var newIndent = indent
 
-        writeLine(writer, "open fun getMimeTypeForFilename(filename: String): String? {", newIndent)
+        writeLine(writer, "open fun getMimeTypesForFilename(filename: String): List<String>? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return getMimeTypeForExtension(filename.substringAfterLast('.', \"\"))", newIndent)
+        writeLine(writer, "return getMimeTypesForExtension(filename.substringAfterLast('.', \"\"))", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
         return newIndent
     }
 
-    open protected fun writeGetMimeTypeForExtensionMethod(writer: FileWriter, indent: Int, fileExtensionsMap: String): Int {
+    open protected fun writeGetMimeTypesForExtensionMethod(writer: FileWriter, indent: Int, fileExtensionsMap: String): Int {
         var newIndent = indent
 
-        writeLine(writer, "open fun getMimeTypeForExtension(fileExtension: String): String? {", newIndent)
+        writeLine(writer, "open fun getMimeTypesForExtension(fileExtension: String): List<String>? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return $fileExtensionsMap[normalizeFileExtension(fileExtension)]", newIndent)
+        writeLine(writer, "return $fileExtensionsMap[normalizeFileExtension(fileExtension)]?.toList()", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
@@ -262,7 +262,17 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
 
         writeLineAndAnEmptyLine(writer, "$mimeTypesMap[mimeTypeLowerCased]?.add(fileExtension)", newIndent)
 
-        writeLine(writer, "$fileExtensionsMap.put(fileExtension.toLowerCase(), mimeType)", newIndent)
+
+        writeLineAndAnEmptyLine(writer, "val fileExtensionLowerCased = fileExtension.toLowerCase()", newIndent)
+
+        writeLine(writer, "if($fileExtensionsMap.containsKey(fileExtensionLowerCased) == false) {", newIndent)
+        newIndent++
+
+        writeLine(writer, "$fileExtensionsMap.put(fileExtensionLowerCased, LinkedHashSet())", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+        writeLineAndAnEmptyLine(writer, "$fileExtensionsMap[fileExtensionLowerCased]?.add(mimeType)", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 

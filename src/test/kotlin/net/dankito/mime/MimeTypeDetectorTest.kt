@@ -13,59 +13,59 @@ class MimeTypeDetectorTest {
 
 
     @Test
-    fun getMimeTypeForFile() {
-        val result = underTest.getMimeTypeForFile(File("/tmp/text.txt"))
+    fun getMimeTypesForFile() {
+        val result = underTest.getMimeTypesForFile(File("/tmp/text.txt"))
 
-        assertThat(result, `is`("text/plain"))
+        assertThat(result?.contains("text/plain"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForUri() {
-        val result = underTest.getMimeTypeForUri(URI.create("http://www.reporter-forum.de/fileadmin/pdf/Reporterpreis_2017/ueberwachung.pdf"))
+    fun getMimeTypesForUri() {
+        val result = underTest.getMimeTypesForUri(URI.create("http://www.reporter-forum.de/fileadmin/pdf/Reporterpreis_2017/ueberwachung.pdf"))
 
-        assertThat(result, `is`("application/pdf"))
+        assertThat(result?.contains("application/pdf"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForFilename() {
-        val result = underTest.getMimeTypeForFilename("document.docx")
+    fun getMimeTypesForFilename() {
+        val result = underTest.getMimeTypesForFilename("document.docx")
 
-        assertThat(result, `is`("application/pdf"))
+        assertThat(result?.contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForFilename_UseUri() {
-        val result = underTest.getMimeTypeForFilename("http://www.reporter-forum.de/fileadmin/pdf/Reporterpreis_2017/ueberwachung.pdf")
+    fun getMimeTypesForFilename_UseUri() {
+        val result = underTest.getMimeTypesForFilename("http://www.reporter-forum.de/fileadmin/pdf/Reporterpreis_2017/ueberwachung.pdf")
 
-        assertThat(result, `is`("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+        assertThat(result?.contains("application/pdf"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForBmpExtension() {
-        val result = underTest.getMimeTypeForExtension("bmp")
+    fun getMimeTypesForBmpExtension() {
+        val result = underTest.getMimeTypesForExtension("bmp")
 
-        assertThat(result, `is`("image/bmp"))
+        assertThat(result?.contains("image/bmp"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForPngExtension() {
-        val result = underTest.getMimeTypeForExtension("png")
+    fun getMimeTypesForPngExtension() {
+        val result = underTest.getMimeTypesForExtension("png")
 
-        assertThat(result, `is`("image/png"))
+        assertThat(result?.contains("image/png"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForExtension_WithDot() {
-        val result = underTest.getMimeTypeForExtension(".png")
+    fun getMimeTypesForExtension_WithDot() {
+        val result = underTest.getMimeTypesForExtension(".png")
 
-        assertThat(result, `is`("image/png"))
+        assertThat(result?.contains("image/png"), `is`(true))
     }
 
     @Test
-    fun getMimeTypeForExtension_WithStarAndDot() {
-        val result = underTest.getMimeTypeForExtension("*.png")
+    fun getMimeTypesForExtension_WithStarAndDot() {
+        val result = underTest.getMimeTypesForExtension("*.png")
 
-        assertThat(result, `is`("image/png"))
+        assertThat(result?.contains("image/png"), `is`(true))
     }
 
 }
