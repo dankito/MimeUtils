@@ -5,7 +5,7 @@ import java.io.File
 import java.io.FileReader
 
 
-open class IanaMimeTypeFileParser {
+open class IanaMimeTypeFileParser : MimeTypeFileParserBase() {
 
     companion object {
         private val log = LoggerFactory.getLogger(IanaMimeTypeFileParser::class.java)
@@ -59,16 +59,6 @@ open class IanaMimeTypeFileParser {
         }
         else {
             log.warn("Csv line has ${columns.size} but should have 3 or for image.csv 4 columns: $line")
-        }
-    }
-
-    open protected fun addFileExtensionForMimeType(mimeTypesToExtensionsMap: HashMap<String, MutableSet<String>>, mimeType: String, fileExtension: String) {
-        val fileExtensionsForMimeType = mimeTypesToExtensionsMap[mimeType] ?: LinkedHashSet() // a LinkedHashSet to keep alphabetic ordering
-
-        fileExtensionsForMimeType.add(fileExtension)
-
-        if (fileExtensionsForMimeType.size == 1) {
-            mimeTypesToExtensionsMap.put(mimeType, fileExtensionsForMimeType)
         }
     }
 
