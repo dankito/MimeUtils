@@ -4,7 +4,7 @@ import net.dankito.mime.util.FileDownloader
 import java.io.File
 
 
-open class IanaMimeTypeRetriever(val parser: IanaMimeTypeFileParser, val downloader: FileDownloader) {
+open class IanaMimeTypeRetriever(protected val parser: IanaMimeTypeFileParser, protected val downloader: FileDownloader) {
 
     companion object {
         const val ApplicationCsvUrl = "http://www.iana.org/assignments/media-types/application.csv"
