@@ -1,6 +1,5 @@
-package net.dankito.mime.service
+package net.dankito.mime.service.creator
 
-import net.dankito.mime.IanaMimeTypeRetriever
 import net.dankito.mime.model.CreateMimeTypeDetectorConfig
 import java.io.File
 import java.io.FileWriter

@@ -1,4 +1,4 @@
-package net.dankito.mime
+package net.dankito.mime.service.creator
 
 import net.dankito.mime.service.FileDownloader
 import java.io.File

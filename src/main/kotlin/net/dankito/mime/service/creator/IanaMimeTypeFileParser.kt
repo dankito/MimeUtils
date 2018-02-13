@@ -1,4 +1,4 @@
-package net.dankito.mime
+package net.dankito.mime.service.creator
 
 import org.slf4j.LoggerFactory
 import java.io.File
