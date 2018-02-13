@@ -3,6 +3,40 @@ package net.dankito.mime
 
 class MimeTypeCategorizer {
 
+    fun getBestPick(mimeTypes: List<String>?): String? {
+        mimeTypes?.let {
+            if(mimeTypes.isEmpty()) {
+                return null
+            }
+
+            val mimeTypesWithoutEmptyEntries = mimeTypes.filter { it.isNotBlank() }
+            if(mimeTypesWithoutEmptyEntries.size == 1) {
+                return mimeTypesWithoutEmptyEntries[0]
+            }
+
+
+            val withoutExtensionsMimeTypes = mimeTypesWithoutEmptyEntries.filter { it.contains("x-") == false }
+            if(withoutExtensionsMimeTypes.size == 1) {
+                return withoutExtensionsMimeTypes[0]
+            }
+
+
+            val withoutApplicationMimeTypes = mimeTypesWithoutEmptyEntries.filter { it.startsWith("application/") == false }
+            if(withoutApplicationMimeTypes.size == 1) {
+                return withoutApplicationMimeTypes[0]
+            }
+
+            val withoutApplicationAndExtensionsMimeTypes = withoutApplicationMimeTypes.filter { it.contains("x-") == false }
+            if(withoutApplicationAndExtensionsMimeTypes.size == 1) {
+                return withoutApplicationAndExtensionsMimeTypes[0]
+            }
+
+            return mimeTypes.last() // often the last Mime type is the best one
+        }
+
+        return null
+    }
+
 
     fun isImageFile(mimeType: String): Boolean {
         return mimeType.startsWith("image/", true)
