@@ -48,7 +48,10 @@ open class SitePointMimeTypeWebsiteParser(protected val downloader: FileDownload
             val tableData = tableRow.select("td")
 
             if(tableData.size == 2) {
-                addFileExtensionForMimeType(mimeTypesToExtensionsMap, tableData[1].text().trim(), tableData[0].text().trim())
+                val mimeType = tableData[1].text().trim()
+                val fileExtension = tableData[0].text().trim().substringAfter('.') // remove '.' from file extension
+
+                addFileExtensionForMimeType(mimeTypesToExtensionsMap, mimeType, fileExtension)
             }
             else {
                 log.warn("Table row's column size is ${tableData.size} and not 2:${tableData.mapIndexed { index, element -> "\n[$index] ${element.html()}" } }")
