@@ -12,24 +12,36 @@ open class IanaMimeTypeFileParser {
     }
 
 
-    open fun parseIanaCsvFileNotThrowingExceptions(csvFile: File) {
+    open fun parseIanaCsvFileNotThrowingExceptions(csvFile: File): Map<String, MutableSet<String>>? {
         try {
-            parseIanaCsvFile(csvFile)
+            return parseIanaCsvFile(csvFile)
         } catch(e: Exception) {
             log.error("Could not parse .csv file $csvFile", e)
         }
+
+        return null
     }
 
-    open fun parseIanaCsvFile(csvFile: File): Map<String, Set<String>> {
-        val mimeTypesToExtensionsMap = HashMap<String, MutableSet<String>>()
-
+    open fun parseIanaCsvFile(csvFile: File): Map<String, MutableSet<String>> {
         val reader = FileReader(csvFile)
 
-        reader.forEachLine {
-            parseCsvLine(mimeTypesToExtensionsMap, it)
-        }
+        val fileContent = reader.readLines()
 
         reader.close()
+
+        return parseIanaCsvFile(fileContent)
+    }
+
+    open fun parseIanaCsvFile(csvFileContent: String): Map<String, MutableSet<String>> {
+        return parseIanaCsvFile(csvFileContent.lines())
+    }
+
+    open fun parseIanaCsvFile(csvFileLines: List<String>): Map<String, MutableSet<String>> {
+        val mimeTypesToExtensionsMap = HashMap<String, MutableSet<String>>()
+
+        csvFileLines.forEach {
+            parseCsvLine(mimeTypesToExtensionsMap, it)
+        }
 
         return mimeTypesToExtensionsMap
     }
