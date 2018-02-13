@@ -34,6 +34,26 @@ class MimeTypeCategorizerTest {
     }
 
     @Test
+    fun getBestPickForAvi() {
+        getAndTestBestPick("avi", "video/avi")
+    }
+
+    @Test
+    fun getBestPickForMpeg() {
+        getAndTestBestPick("mpeg", "video/mpeg")
+    }
+
+    @Test
+    fun getBestPickForOgg() {
+        getAndTestBestPick("ogg", "audio/ogg")
+    }
+
+    @Test
+    fun getBestPickFor3gpp() {
+        getAndTestBestPick("3gpp", "video/3gpp")
+    }
+
+    @Test
     fun getBestPickForText() {
         getAndTestBestPick("text", "text/plain")
     }
