@@ -62,7 +62,7 @@ class MimeTypeCategorizer {
         when(mimeType.toLowerCase()) {
             "application/msword",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/vnd.ms-word.document.macroEnabled.12"
+            "application/vnd.ms-word.document.macroenabled.12"
                 -> return true
             else
                 -> return false
@@ -72,7 +72,7 @@ class MimeTypeCategorizer {
     fun isMicrosoftWordTemplate(mimeType: String): Boolean {
         when(mimeType.toLowerCase()) {
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
-            "application/vnd.ms-word.template.macroEnabled.12"
+            "application/vnd.ms-word.template.macroenabled.12"
                 -> return true
             else
                 -> return false
@@ -87,8 +87,8 @@ class MimeTypeCategorizer {
         when(mimeType.toLowerCase()) {
             "application/vnd.ms-excel",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "application/vnd.ms-excel.sheet.macroEnabled.12",
-            "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+            "application/vnd.ms-excel.sheet.macroenabled.12",
+            "application/vnd.ms-excel.sheet.binary.macroenabled.12"
                 -> return true
             else
                 -> return false
@@ -98,7 +98,7 @@ class MimeTypeCategorizer {
     fun isMicrosoftExcelTemplate(mimeType: String): Boolean {
         when(mimeType.toLowerCase()) {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
-            "application/vnd.ms-excel.template.macroEnabled.12"
+            "application/vnd.ms-excel.template.macroenabled.12"
                 -> return true
             else
                 -> return false
@@ -113,7 +113,7 @@ class MimeTypeCategorizer {
         when(mimeType.toLowerCase()) {
             "application/vnd.ms-powerpoint",
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "application/vnd.ms-powerpoint.presentation.macroEnabled.12"
+            "application/vnd.ms-powerpoint.presentation.macroenabled.12"
                 -> return true
             else
                 -> return false
@@ -123,7 +123,7 @@ class MimeTypeCategorizer {
     fun isMicrosoftPowerPointTemplate(mimeType: String): Boolean {
         when(mimeType.toLowerCase()) {
             "application/vnd.openxmlformats-officedocument.presentationml.template",
-            "application/vnd.ms-powerpoint.template.macroEnabled.12"
+            "application/vnd.ms-powerpoint.template.macroenabled.12"
                 -> return true
             else
                 -> return false
@@ -133,7 +133,7 @@ class MimeTypeCategorizer {
     fun isMicrosoftPowerPointSlideshow(mimeType: String): Boolean {
         when(mimeType.toLowerCase()) {
             "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
-            "application/vnd.ms-powerpoint.slideshow.macroEnabled.12"
+            "application/vnd.ms-powerpoint.slideshow.macroenabled.12"
                 -> return true
             else
                 -> return false
