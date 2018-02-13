@@ -9,7 +9,8 @@ import java.util.*
 
 
 /**
- * Fetches Mime types files with IanaMimeTypeRetriever
+ * Fetches Mime types files with IanaMimeTypeRetriever,
+ * EtcMimeTypesFileParser and SitePointMimeTypeWebsiteParser
  * and creates a source code file listing all these Mime types.
  */
 open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMimeTypesFileParser, protected val ianaMimeTypeRetriever: IanaMimeTypeRetriever,
