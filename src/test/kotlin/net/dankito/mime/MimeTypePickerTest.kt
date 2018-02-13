@@ -30,7 +30,7 @@ class MimeTypePickerTest {
 
     @Test
     fun getBestPickForMp3() {
-        getAndTestBestPick("mp3", "audio/mpeg3")
+        getAndTestBestPick("mp3", "audio/mpeg")
     }
 
     @Test

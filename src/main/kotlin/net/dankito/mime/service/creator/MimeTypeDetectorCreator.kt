@@ -12,13 +12,15 @@ import java.util.*
  * Fetches Mime types files with IanaMimeTypeRetriever
  * and creates a source code file listing all these Mime types.
  */
-open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMimeTypeRetriever, protected val sitePointParser: SitePointMimeTypeWebsiteParser) {
+open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMimeTypesFileParser, protected val ianaMimeTypeRetriever: IanaMimeTypeRetriever,
+                                   protected val sitePointParser: SitePointMimeTypeWebsiteParser) {
 
 
     @JvmOverloads
     open fun createMimeTypeDetectorClass(outputFile: File, config: CreateMimeTypeDetectorConfig = CreateMimeTypeDetectorConfig()) {
         outputFile.parentFile.mkdirs()
 
+        val etcMimeTypesToExtensionsMap = etcMimeTypesFileParser.parseEtcMimeTypesFile()
         val ianaMimeTypesToExtensionsMap = ianaMimeTypeRetriever.retrieveAndParseAllFiles()
         val sitePointMimeTypesToExtensionsMap = sitePointParser.parseSitePointWebsite()
 
@@ -40,7 +42,7 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
         writeEmptyLine(writer)
 
 
-        indent = writeInitializerMethod(writer, indent, ianaMimeTypesToExtensionsMap, sitePointMimeTypesToExtensionsMap)
+        indent = writeInitializerMethod(writer, indent, etcMimeTypesToExtensionsMap, ianaMimeTypesToExtensionsMap, sitePointMimeTypesToExtensionsMap)
 
         writeEmptyLine(writer)
 
@@ -109,14 +111,15 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
         writeLineAndAnEmptyLine(writer, "protected val $fileExtensionsMap = HashMap<String, MutableSet<String>>()", indent)
     }
 
-    open protected fun writeInitializerMethod(writer: FileWriter, indent: Int, ianaMimeTypesToExtensionsMap: Map<String, Set<String>>, sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
+    open protected fun writeInitializerMethod(writer: FileWriter, indent: Int, etcMimeTypesToExtensionsMap: Map<String, Set<String>>,
+                                  ianaMimeTypesToExtensionsMap: Map<String, Set<String>>, sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
         var newIndent = indent
 
         writeLine(writer, "init {", newIndent)
         newIndent++
 
-        ianaMimeTypesToExtensionsMap.keys.forEach { mimeType ->
-            ianaMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
+        etcMimeTypesToExtensionsMap.keys.forEach { mimeType ->
+            etcMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
                 writeLine(writer, "add(\"$mimeType\", \"$fileExtension\")", newIndent)
             }
         }
@@ -126,6 +129,12 @@ open class MimeTypeDetectorCreator(protected val ianaMimeTypeRetriever: IanaMime
                 sitePointMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
                     writeLine(writer, "add(\"$mimeType\", \"$fileExtension\")", newIndent)
                 }
+            }
+        }
+
+        ianaMimeTypesToExtensionsMap.keys.forEach { mimeType ->
+            ianaMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
+                writeLine(writer, "add(\"$mimeType\", \"$fileExtension\")", newIndent)
             }
         }
 
