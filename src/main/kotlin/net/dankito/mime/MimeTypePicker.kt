@@ -1,7 +1,18 @@
 package net.dankito.mime
 
+import java.io.File
+import java.net.URI
+
 
 class MimeTypePicker {
+
+    fun getBestPick(detector: MimeTypeDetector, uri: URI): String? {
+        return getBestPick(detector.getMimeTypesForUri(uri))
+    }
+
+    fun getBestPick(detector: MimeTypeDetector, file: File): String? {
+        return getBestPick(detector.getMimeTypesForFile(file))
+    }
 
     fun getBestPick(detector: MimeTypeDetector, fileExtension: String): String? {
         return getBestPick(detector.getMimeTypesForExtension(fileExtension))
