@@ -62,7 +62,7 @@ open class IanaMimeTypeFileParser {
         }
     }
 
-    private fun addFileExtensionForMimeType(mimeTypesToExtensionsMap: HashMap<String, MutableSet<String>>, mimeType: String, fileExtension: String) {
+    open protected fun addFileExtensionForMimeType(mimeTypesToExtensionsMap: HashMap<String, MutableSet<String>>, mimeType: String, fileExtension: String) {
         val fileExtensionsForMimeType = mimeTypesToExtensionsMap[mimeType] ?: LinkedHashSet() // a LinkedHashSet to keep alphabetic ordering
 
         fileExtensionsForMimeType.add(fileExtension)
@@ -72,11 +72,11 @@ open class IanaMimeTypeFileParser {
         }
     }
 
-    private fun isHeaderLine(line: String): Boolean {
+    open protected fun isHeaderLine(line: String): Boolean {
         return line.toLowerCase().startsWith("name,")
     }
 
-    private fun isValidLine(columns: List<String>): Boolean {
+    open protected fun isValidLine(columns: List<String>): Boolean {
         if(columns.size == 3 || columns.size == 4) { // image.csv contains as third column in some cases a description
             return columns[0].isNotBlank() /*  && columns[1].isNotBlank() */ // Mime type to an extensions is not always set
         }
