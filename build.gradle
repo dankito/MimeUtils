@@ -139,13 +139,13 @@ uploadArchives {
                 artifactId = mavenArtifactId
                 packaging 'jar'
 
-                description "Material Design File Chooser Dialog for Android."
-                url 'https://github.com/dankito/AndroidFileChooserDialog'
+                description "Util classes for detecting and categorizing mime types."
+                url 'https://github.com/dankito/MimeUtils'
 
                 scm {
-                    connection 'scm:git:git://github.com/dankito/AndroidFileChooserDialog.git'
-                    developerConnection 'scm:git:git@github.com:dankito/AndroidFileChooserDialog.git'
-                    url 'https://github.com/dankito/AndroidFileChooserDialog'
+                    connection 'scm:git:git://github.com/dankito/MimeUtils.git'
+                    developerConnection 'scm:git:git@github.com:dankito/MimeUtils.git'
+                    url 'https://github.com/dankito/MimeUtils'
                 }
 
                 licenses {
