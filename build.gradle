@@ -96,10 +96,6 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-signing {
-    sign configurations.archives
-}
-
 
 def areSigningPropertiesSet = isPropertySet('signing.secretKeyRingFile') && isPropertySet('signing.keyId') && isPropertySet('signing.password')
 def areOssrhPropertiesSet = isPropertySet('ossrhUsername') && isPropertySet('ossrhPassword')
