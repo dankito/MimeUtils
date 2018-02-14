@@ -65,7 +65,7 @@ class MimeTypePickerTest {
 
     @Test
     fun getBestPickForXlt() {
-        getAndTestBestPick("xlt", "application/excel")
+        getAndTestBestPick("xlt", "application/vnd.ms-excel")
     }
 
     @Test
