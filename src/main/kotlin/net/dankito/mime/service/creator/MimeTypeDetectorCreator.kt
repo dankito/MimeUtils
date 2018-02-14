@@ -91,7 +91,9 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
     open protected fun writeImports(writer: FileWriter, indent: Int) {
         writeLine(writer, "import java.io.File", indent)
 
-        writeLineAndAnEmptyLine(writer, "import java.net.URI", indent)
+        writeLine(writer, "import java.net.URI", indent)
+
+        writeLineAndAnEmptyLine(writer, "import java.net.URLConnection", indent)
     }
 
     open protected fun writeClassStatementAndComment(writer: FileWriter, indent: Int, config: CreateMimeTypeDetectorConfig): Int {
@@ -184,7 +186,39 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeLine(writer, "open fun getMimeTypesForExtension(fileExtension: String): List<String>? {", newIndent)
         newIndent++
 
-        writeLine(writer, "return $fileExtensionsMap[normalizeFileExtension(fileExtension)]?.toList()", newIndent)
+        writeLine(writer, "try {", newIndent)
+        newIndent++
+
+
+        writeLine(writer, "var result = fileExtensionsToMimeTypeMap[normalizeFileExtension(fileExtension)]?.toList()", newIndent)
+        writeEmptyLine(writer)
+
+        writeLine(writer, "if(result == null) { // as a fallback, but actually we should already know all URLConnection Mime types due to parsing Java's MimeUtils class", newIndent)
+        newIndent++
+
+
+        writeLine(writer, "URLConnection.guessContentTypeFromName(fileExtension)?.let { mimeType ->", newIndent)
+        newIndent++
+
+        writeLine(writer, "result = listOf(mimeType)", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent, false)
+
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+        writeLine(writer, "return result", newIndent)
+
+        newIndent--
+
+
+        writeLine(writer, "} catch(e: Exception) { }", newIndent)
+
+        writeEmptyLine(writer)
+
+
+        writeLine(writer, "return null", newIndent)
+
 
         newIndent = writeStatementEnd(writer, newIndent)
 
@@ -384,12 +418,14 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeLine(writer, "")
     }
 
-    open protected fun writeStatementEnd(writer: Writer, indent: Int): Int {
+    open protected fun writeStatementEnd(writer: Writer, indent: Int, addEnEmptyLine: Boolean = true): Int {
         val newIndent = indent - 1
 
         writeLine(writer, "}", newIndent)
 
-        writeEmptyLine(writer)
+        if(addEnEmptyLine) {
+            writeEmptyLine(writer)
+        }
 
         return newIndent
     }

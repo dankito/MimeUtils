@@ -1,6 +1,7 @@
 package net.dankito.mime
 
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.junit.Assert.assertThat
 import org.junit.Test
 import java.io.File
@@ -66,6 +67,14 @@ class MimeTypeDetectorTest {
         val result = underTest.getMimeTypesForExtension("*.png")
 
         assertThat(result?.contains("image/png"), `is`(true))
+    }
+
+
+    @Test
+    fun getMimeTypesForExtension_UnknownFileExtension_NoCrashesOccure() {
+        val result = underTest.getMimeTypesForExtension(".abcdef")
+
+        assertThat(result, nullValue())
     }
 
 }
