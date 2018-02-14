@@ -133,6 +133,7 @@ class MimeTypeCategorizer {
     fun isMicrosoftPowerPointSlideshow(mimeType: String): Boolean {
         when(mimeType.toLowerCase()) {
             "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+            "application/vnd.openxmlformats-officedocument.presentationml.slide", // TODO: is this really a known Mime type?
             "application/vnd.ms-powerpoint.slideshow.macroenabled.12"
                 -> return true
             else
