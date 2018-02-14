@@ -43,7 +43,7 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeEmptyLine(writer)
 
 
-        indent = writeInitializerMethod(writer, indent, etcMimeTypesToExtensionsMap, ianaMimeTypesToExtensionsMap, sitePointMimeTypesToExtensionsMap)
+        indent = writeInitializerMethod(writer, indent)
 
         writeEmptyLine(writer)
 
@@ -66,7 +66,9 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeEmptyLine(writer)
 
 
-        writeAddMethod(writer, indent, mimeTypesMap, fileExtensionsMap)
+        writeGenerateMimeTypeToFileExtensionMappingMethod(writer, indent, etcMimeTypesToExtensionsMap, ianaMimeTypesToExtensionsMap, sitePointMimeTypesToExtensionsMap)
+
+        writeAddMimeTypeToFileExtensionMappingMethod(writer, indent, mimeTypesMap, fileExtensionsMap)
 
 
         writeLine(writer, "}")
@@ -112,32 +114,13 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeLineAndAnEmptyLine(writer, "protected val $fileExtensionsMap = HashMap<String, MutableSet<String>>()", indent)
     }
 
-    open protected fun writeInitializerMethod(writer: FileWriter, indent: Int, etcMimeTypesToExtensionsMap: Map<String, Set<String>>,
-                                  ianaMimeTypesToExtensionsMap: Map<String, Set<String>>, sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
+    open protected fun writeInitializerMethod(writer: FileWriter, indent: Int): Int {
         var newIndent = indent
 
         writeLine(writer, "init {", newIndent)
         newIndent++
 
-        etcMimeTypesToExtensionsMap.keys.forEach { mimeType ->
-            etcMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
-                writeLine(writer, "add(\"$mimeType\", \"$fileExtension\")", newIndent)
-            }
-        }
-
-        sitePointMimeTypesToExtensionsMap?.let {
-            sitePointMimeTypesToExtensionsMap.keys.forEach { mimeType ->
-                sitePointMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
-                    writeLine(writer, "add(\"$mimeType\", \"$fileExtension\")", newIndent)
-                }
-            }
-        }
-
-        ianaMimeTypesToExtensionsMap.keys.forEach { mimeType ->
-            ianaMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
-                writeLine(writer, "add(\"$mimeType\", \"$fileExtension\")", newIndent)
-            }
-        }
+        writeLine(writer, "generateMimeTypeToFileExtensionMapping()", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
@@ -255,10 +238,42 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         return newIndent
     }
 
-    open protected fun writeAddMethod(writer: FileWriter, indent: Int, mimeTypesMap: String, fileExtensionsMap: String): Int {
+    open protected fun writeGenerateMimeTypeToFileExtensionMappingMethod(writer: FileWriter, indent: Int, etcMimeTypesToExtensionsMap: Map<String, Set<String>>,
+                                                                         ianaMimeTypesToExtensionsMap: Map<String, Set<String>>, sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
         var newIndent = indent
 
-        writeLine(writer, "open protected fun add(mimeType: String, fileExtension: String) {", newIndent)
+        writeLine(writer, "open protected fun generateMimeTypeToFileExtensionMapping() {", newIndent)
+        newIndent++
+
+        etcMimeTypesToExtensionsMap.keys.forEach { mimeType ->
+            etcMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
+                writeLine(writer, "addMapping(\"$mimeType\", \"$fileExtension\")", newIndent)
+            }
+        }
+
+        sitePointMimeTypesToExtensionsMap?.let {
+            sitePointMimeTypesToExtensionsMap.keys.forEach { mimeType ->
+                sitePointMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
+                    writeLine(writer, "addMapping(\"$mimeType\", \"$fileExtension\")", newIndent)
+                }
+            }
+        }
+
+        ianaMimeTypesToExtensionsMap.keys.forEach { mimeType ->
+            ianaMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
+                writeLine(writer, "addMapping(\"$mimeType\", \"$fileExtension\")", newIndent)
+            }
+        }
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+        return newIndent
+    }
+
+    open protected fun writeAddMimeTypeToFileExtensionMappingMethod(writer: FileWriter, indent: Int, mimeTypesMap: String, fileExtensionsMap: String): Int {
+        var newIndent = indent
+
+        writeLine(writer, "open protected fun addMapping(mimeType: String, fileExtension: String) {", newIndent)
         newIndent++
 
 
