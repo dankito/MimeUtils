@@ -62,6 +62,11 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeEmptyLine(writer)
 
 
+        indent = writeGetBestPickConvenienceMethods(writer, indent, config)
+
+        writeEmptyLine(writer)
+
+
         indent = writeGetExtensionsForMimeTypeMethod(writer, indent, mimeTypesMap)
 
         writeEmptyLine(writer)
@@ -107,7 +112,8 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeLine(writer, " * - the mime types listed on https://www.sitepoint.com/mime-types-complete-list/", indent)
         writeLine(writer, " */", indent)
 
-        writeLineAndAnEmptyLine(writer, "open class ${config.className} {", newIndent)
+        writeLineAndAnEmptyLine(writer, "open class ${config.className}  " +
+                "@JvmOverloads constructor(protected val ${config.mimeTypePickerVariableName}: MimeTypePicker = MimeTypePicker()) {", newIndent)
         newIndent++
 
         return newIndent
@@ -225,6 +231,46 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
 
 
         newIndent = writeStatementEnd(writer, newIndent)
+
+        return newIndent
+    }
+
+
+    open protected fun writeGetBestPickConvenienceMethods(writer: FileWriter, indent: Int, config: CreateMimeTypeDetectorConfig): Int {
+        var newIndent = indent
+
+
+        writeLine(writer, "open fun getBestPickForUri(uri: URI): String? {", newIndent)
+        newIndent++
+
+        writeLine(writer, "return ${config.mimeTypePickerVariableName}.getBestPick(getMimeTypesForUri(uri))", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+
+        writeLine(writer, "open fun getBestPickForFile(file: File): String? {", newIndent)
+        newIndent++
+
+        writeLine(writer, "return ${config.mimeTypePickerVariableName}.getBestPick(getMimeTypesForFile(file))", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+
+        writeLine(writer, "open fun getBestPickForFilename(filename: String): String? {", newIndent)
+        newIndent++
+
+        writeLine(writer, "return ${config.mimeTypePickerVariableName}.getBestPick(getMimeTypesForFilename(filename))", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
+
+        writeLine(writer, "open fun getBestPickForExtension(fileExtension: String): String? {", newIndent)
+        newIndent++
+
+        writeLine(writer, "return ${config.mimeTypePickerVariableName}.getBestPick(getMimeTypesForExtension(fileExtension))", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
 
         return newIndent
     }
