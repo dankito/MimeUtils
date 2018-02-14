@@ -11,8 +11,8 @@ class MimeTypeDetectorCreatorIntegrationTest {
 
     private val downloader = FileDownloader()
 
-    private val underTest = MimeTypeDetectorCreator(EtcMimeTypesFileParser(), IanaMimeTypeRetriever(IanaMimeTypeFileParser(), downloader),
-            SitePointMimeTypeWebsiteParser(downloader))
+    private val underTest = MimeTypeDetectorCreator(EtcMimeTypesFileParser(), JavaMimeUtilsParser(downloader),
+            IanaMimeTypeRetriever(IanaMimeTypeFileParser(), downloader), SitePointMimeTypeWebsiteParser(downloader))
 
 
     @Test
@@ -27,7 +27,7 @@ class MimeTypeDetectorCreatorIntegrationTest {
 
         reader.close()
 
-        assertThat(createdFile.lines().size, `is`(3622))
+        assertThat(createdFile.lines().size, `is`(3971))
     }
 
 }

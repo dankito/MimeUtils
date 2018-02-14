@@ -13,8 +13,8 @@ import java.util.*
  * EtcMimeTypesFileParser and SitePointMimeTypeWebsiteParser
  * and creates a source code file listing all these Mime types.
  */
-open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMimeTypesFileParser, protected val ianaMimeTypeRetriever: IanaMimeTypeRetriever,
-                                   protected val sitePointParser: SitePointMimeTypeWebsiteParser) {
+open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMimeTypesFileParser, protected val javaMimeUtilsParser: JavaMimeUtilsParser,
+                                   protected val ianaMimeTypeRetriever: IanaMimeTypeRetriever, protected val sitePointParser: SitePointMimeTypeWebsiteParser) {
 
 
     @JvmOverloads
@@ -22,6 +22,7 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         outputFile.parentFile.mkdirs()
 
         val etcMimeTypesToExtensionsMap = etcMimeTypesFileParser.parseEtcMimeTypesFile()
+        val javaMimeUtilsMimeTypesToExtensionsMap = javaMimeUtilsParser.parseJavaMimeUtilsSource()
         val ianaMimeTypesToExtensionsMap = ianaMimeTypeRetriever.retrieveAndParseAllFiles()
         val sitePointMimeTypesToExtensionsMap = sitePointParser.parseSitePointWebsite()
 
@@ -66,7 +67,8 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeEmptyLine(writer)
 
 
-        writeGenerateMimeTypeToFileExtensionMappingMethod(writer, indent, etcMimeTypesToExtensionsMap, ianaMimeTypesToExtensionsMap, sitePointMimeTypesToExtensionsMap)
+        writeGenerateMimeTypeToFileExtensionMappingMethod(writer, indent, etcMimeTypesToExtensionsMap, javaMimeUtilsMimeTypesToExtensionsMap,
+                ianaMimeTypesToExtensionsMap, sitePointMimeTypesToExtensionsMap)
 
         writeAddMimeTypeToFileExtensionMappingMethod(writer, indent, mimeTypesMap, fileExtensionsMap)
 
@@ -241,7 +243,8 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
     }
 
     open protected fun writeGenerateMimeTypeToFileExtensionMappingMethod(writer: FileWriter, indent: Int, etcMimeTypesToExtensionsMap: Map<String, Set<String>>,
-                                                                         ianaMimeTypesToExtensionsMap: Map<String, Set<String>>, sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
+                                     javaMimeUtilsMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?, ianaMimeTypesToExtensionsMap: Map<String, Set<String>>,
+                                     sitePointMimeTypesToExtensionsMap: Map<String, MutableSet<String>>?): Int {
         var newIndent = indent
 
         writeLine(writer, "open protected fun generateMimeTypeToFileExtensionMapping() {", newIndent)
@@ -250,6 +253,14 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         etcMimeTypesToExtensionsMap.keys.forEach { mimeType ->
             etcMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
                 writeLine(writer, "addMapping(\"$mimeType\", \"$fileExtension\")", newIndent)
+            }
+        }
+
+        javaMimeUtilsMimeTypesToExtensionsMap?.let {
+            javaMimeUtilsMimeTypesToExtensionsMap.keys.forEach { mimeType ->
+                javaMimeUtilsMimeTypesToExtensionsMap[mimeType]?.forEach { fileExtension ->
+                    writeLine(writer, "addMapping(\"$mimeType\", \"$fileExtension\")", newIndent)
+                }
             }
         }
 
