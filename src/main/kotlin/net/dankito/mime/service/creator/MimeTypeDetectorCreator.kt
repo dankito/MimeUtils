@@ -131,7 +131,7 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeLine(writer, "init {", newIndent)
         newIndent++
 
-        writeLine(writer, "generateMimeTypeToFileExtensionMapping()", newIndent)
+        writeLine(writer, "generateMimeTypeToFileExtensionMapping() // ignore Calling non-final function in constructor warning, i want to make it overwritable", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
 
