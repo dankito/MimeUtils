@@ -33,6 +33,10 @@ open class MimeTypeDetector  @JvmOverloads constructor(protected val picker: Mim
     }
 
     open fun getMimeTypesForFile(file: File): List<String>? {
+        if(file.isDirectory) { // fixes bug that '.' in directory names got treated as file extension (e. g. thinks that '.2' in '.AndroidStudio3.2' is a file extension)
+            return null
+        }
+
         return getMimeTypesForExtension(file.extension)
     }
 

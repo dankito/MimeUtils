@@ -160,6 +160,13 @@ open class MimeTypeDetectorCreator(protected val etcMimeTypesFileParser: EtcMime
         writeLine(writer, "open fun getMimeTypesForFile(file: File): List<String>? {", newIndent)
         newIndent++
 
+        writeLine(writer, "if(file.isDirectory) { // fixes bug that '.' in directory names got treated as file extension (e. g. thinks that '.2' in '.AndroidStudio3.2' is a file extension)", newIndent)
+        newIndent++
+
+        writeLine(writer, "return null", newIndent)
+
+        newIndent = writeStatementEnd(writer, newIndent)
+
         writeLine(writer, "return getMimeTypesForExtension(file.extension)", newIndent)
 
         newIndent = writeStatementEnd(writer, newIndent)
