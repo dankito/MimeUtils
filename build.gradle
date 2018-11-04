@@ -33,7 +33,7 @@ buildscript {
 }
 
 
-group 'net.dankito.mime'
+group 'net.dankito.utils'
 version '1.0.1'
 def mavenArtifactId = 'mime-utils'
 
